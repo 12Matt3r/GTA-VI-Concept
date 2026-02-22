@@ -1,0 +1,572 @@
+/* Command input, submit button, credits button, music controls, and credits modal */
+
+#command-interface {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#command-input {
+    width: 100%;
+    max-width: 360px;
+    min-width: 120px;
+    flex: 1;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--electric-cyan);
+    border-left: 4px solid var(--electric-cyan);
+    color: var(--ghost-white);
+    font-family: var(--font-body);
+    font-size: 13px;
+    border-radius: 2px;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#command-input:focus {
+    background: rgba(0, 20, 20, 0.8);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.15), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    border-color: var(--electric-cyan);
+}
+
+/* New: subtle error feedback when trying to submit an empty command */
+#command-input.input-error {
+    border-color: var(--reality-red);
+    border-left-color: var(--reality-red);
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+    animation: input-wiggle 0.4s ease-in-out;
+    color: var(--reality-red);
+}
+
+@keyframes input-wiggle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+#command-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Disabled state feedback for commands */
+#command-input:disabled {
+    border-color: rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.6);
+    color: rgba(255, 255, 255, 0.35);
+    cursor: not-allowed;
+}
+
+#command-submit {
+    padding: 12px 24px;
+    background: linear-gradient(45deg, var(--consciousness-purple), #4a0080);
+    border: 1px solid var(--neon-pink);
+    color: var(--neon-pink);
+    font-family: var(--font-header);
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+}
+
+#command-submit:hover {
+    background: var(--neon-pink);
+    color: black;
+    box-shadow: 0 0 15px var(--neon-pink);
+    text-shadow: none;
+    transform: translateY(-1px);
+}
+
+#command-submit:active {
+    transform: scale(0.98);
+}
+
+/* Disabled state for manifest button */
+#command-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Credits button */
+#credits-button {
+    padding: 12px 14px;
+    background: transparent;
+    border-radius: 50%;
+    border: 2px solid var(--dream-gold);
+    color: var(--dream-gold);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+}
+
+/* MUSIC CONTROLS */
+#music-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#master-vol-indicator {
+    min-width: 44px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--dream-gold);
+}
+
+#music-controls button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border-radius: 4px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--electric-cyan);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease, box-shadow 0.2s ease, transform 0.08s ease;
+}
+
+/* NEW: TTS toggle visual state when disabled */
+body.tts-muted #tts-toggle {
+    border-color: var(--reality-red);
+    color: var(--reality-red);
+    background: rgba(255, 0, 85, 0.12);
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.6);
+}
+
+/* Optional: slightly distinguish TTS button when active */
+#tts-toggle {
+    font-size: 12px;
+    padding: 0 8px;
+}
+
+/* Journal button near credits */
+#journal-button {
+    padding: 10px 14px;
+    background: transparent;
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    color: var(--electric-cyan);
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    transition: all 0.2s ease;
+}
+
+#journal-button:hover {
+    background: rgba(0, 255, 255, 0.12);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+#journal-button:active {
+    transform: scale(0.96) translateY(1px);
+}
+
+#music-controls button:hover {
+    background: rgba(0, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+#music-controls button:active {
+    transform: scale(0.92) translateY(1px);
+}
+
+#music-controls button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* Highlight the play/pause button when music is playing */
+body.music-playing #music-play-pause {
+    background: radial-gradient(circle at 30% 0%, rgba(0, 255, 255, 0.25), rgba(0, 0, 0, 0.9));
+    border-color: var(--dream-gold);
+    color: var(--dream-gold);
+    box-shadow:
+        0 0 12px rgba(255, 215, 0, 0.7),
+        0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+/* Credits modal */
+#credits-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#credits-modal.open {
+    display: flex;
+}
+
+#credits-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(6px);
+}
+
+#credits-content {
+    position: relative;
+    max-width: 640px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: radial-gradient(circle at top, rgba(10, 0, 25, 0.98), rgba(0, 0, 0, 0.98));
+    border: 2px solid var(--consciousness-purple);
+    box-shadow: 0 0 30px rgba(157, 0, 255, 0.8);
+    padding: 24px 24px 32px;
+    color: var(--ghost-white);
+}
+
+#credits-content h2 {
+    font-size: 22px;
+    color: var(--dream-gold);
+    margin-bottom: 12px;
+    text-align: center;
+    text-shadow: 0 0 12px var(--dream-gold);
+}
+
+#credits-content section {
+    margin-top: 12px;
+}
+
+#credits-content h3 {
+    font-size: 16px;
+    color: var(--electric-cyan);
+    margin-bottom: 4px;
+}
+
+#credits-content p {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#credits-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--ghost-white);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.credits-final-note {
+    margin-top: 16px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    padding-top: 8px;
+    font-style: italic;
+}
+
+/* Multi-page credits layout */
+#credits-pages {
+    margin-top: 12px;
+}
+
+.credits-page {
+    display: none;
+}
+
+.credits-page.active {
+    display: block;
+}
+
+#credits-pagination {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+#credits-pagination button {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--ghost-white);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+#credits-pagination button:hover {
+    background: rgba(0, 255, 255, 0.18);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+#credits-pagination button:active {
+    transform: scale(0.95);
+}
+
+#credits-pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* Game Description Modal (shares visual language with credits modal) */
+#game-description-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200; /* Above CRT and HUD */
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-description-modal.open {
+    display: flex;
+}
+
+#game-description-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+#game-description-content {
+    position: relative;
+    max-width: 780px;
+    width: 92%;
+    max-height: 84vh;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(10, 0, 25, 0.98), rgba(0, 0, 0, 0.98));
+    border: 2px solid var(--electric-cyan);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.9);
+    padding: 20px 22px 26px;
+    color: var(--ghost-white);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#game-description-content h2 {
+    font-size: 20px;
+    color: var(--dream-gold);
+    margin-bottom: 6px;
+    text-align: center;
+    text-shadow: 0 0 12px var(--dream-gold);
+}
+
+#game-description-content .description-note {
+    font-size: 12px;
+    color: var(--electric-cyan);
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+#game-description-textarea {
+    flex: 1;
+    width: 100%;
+    min-height: 260px;
+    resize: vertical;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--ghost-white);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    outline: none;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
+}
+
+#game-description-textarea:focus {
+    border-color: var(--neon-pink);
+    box-shadow:
+        inset 0 0 10px rgba(0, 0, 0, 1),
+        0 0 16px rgba(255, 0, 255, 0.6);
+}
+
+#game-description-actions {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#game-description-copy {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--ghost-white);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.08s ease;
+}
+
+#game-description-copy:hover {
+    background: rgba(0, 255, 255, 0.18);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+}
+
+#game-description-copy:active {
+    transform: scale(0.96) translateY(1px);
+}
+
+#game-description-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--ghost-white);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Player Journal Modal */
+#journal-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#journal-modal.open {
+    display: flex;
+}
+
+#journal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+#journal-content {
+    position: relative;
+    max-width: 780px;
+    width: 92%;
+    max-height: 84vh;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(10, 0, 25, 0.98), rgba(0, 0, 0, 0.98));
+    border: 2px solid var(--consciousness-purple);
+    box-shadow: 0 0 40px rgba(157, 0, 255, 0.9);
+    padding: 20px 22px 26px;
+    color: var(--ghost-white);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#journal-content h2 {
+    font-size: 20px;
+    color: var(--dream-gold);
+    margin-bottom: 4px;
+    text-align: center;
+    text-shadow: 0 0 12px var(--dream-gold);
+}
+
+#journal-content .journal-note {
+    font-size: 12px;
+    color: var(--electric-cyan);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+#journal-entries-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.journal-entry {
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.journal-entry h3 {
+    font-size: 13px;
+    color: var(--dream-gold);
+    margin-bottom: 4px;
+}
+
+.journal-entry .journal-action {
+    font-size: 11px;
+    color: var(--electric-cyan);
+    margin-bottom: 4px;
+}
+
+.journal-entry .journal-narrative {
+    font-size: 11px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.journal-entry img {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    object-fit: cover;
+}
+
+/* Journal close button */
+#journal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--ghost-white);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Mobile tuning for description and journal modals */
+@media (max-width: 600px) {
+    #game-description-content {
+        max-height: 86vh;
+        padding: 16px 14px 20px;
+    }
+
+    #game-description-textarea {
+        font-size: 11px;
+    }
+
+    #game-description-copy {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #journal-content {
+        max-height: 86vh;
+        padding: 16px 14px 20px;
+    }
+
+    .journal-entry {
+        font-size: 11px;
+    }
+}

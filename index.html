@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leonida 360°: Vice City Crime Simulator</title>
+    <link rel="stylesheet" href="chromashift.css">
+    <!-- NEW: CRT overlay styles extracted for clarity -->
+    <link rel="stylesheet" href="chromashift-crt.css">
+    
+    <!-- FONTS: Orbitron for headers, Space Mono for data/text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- NEW: Import map to resolve Three.js module -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "./three.module.js"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- CRT Transition Overlay -->
+    <div id="crt-overlay" class="active">
+        <img src="/CRTV-removebg-preview.png" id="crt-tv" alt="CRT TV">
+        <!-- NEW: Black "TV off" cover over the screen area -->
+        <div id="crt-screen-off"></div>
+        <img src="/RGB_LOGO_datamoshed_Glitch Assist Pack_ZoomIn(1) (1).gif" id="glitch-effect" alt="Glitch">
+        <!-- Intro WebM video that plays on the TV screen before the game starts -->
+        <video
+            id="crt-intro-video"
+            src="/videoplayback.mp4"
+            autoplay
+            playsinline
+        ></video>
+        <!-- Blinking loading text in bottom-left, styled as if baked into the CRT video -->
+        <div id="crt-loading-text">LOADING…</div>
+        <!-- New: allow user to skip the intro video -->
+        <button id="crt-skip-intro" type="button">SKIP INTRO</button>
+        <div id="prolog-text"></div>
+        <!-- NEW: Chromashift power button on TV side panel -->
+        <img src="/Chromashift.gif" id="crt-power-button" alt="Power Button">
+        <!-- NEW: Save / Load / New Game buttons on TV side panel -->
+        <button id="save-game-button" type="button">SAVE GAME</button>
+        <button id="load-game-button" type="button">LOAD GAME</button>
+        <button id="new-game-button" type="button">NEW GAME</button>
+        <!-- NEW: Chroma Awards and abstract bars badges on CRT overlay -->
+        <img src="/IMG_0439.webp" id="crt-chroma-logo" class="crt-badge" alt="Chroma Awards logo">
+        <img src="/IMG_0438.webp" id="crt-bars-logo" class="crt-badge" alt="Abstract bars waveform">
+        <svg id="eye-blink" viewBox="0 0 200 100">
+            <ellipse cx="100" cy="50" rx="80" ry="40" fill="#ff00ff" opacity="0.8"/>
+            <ellipse cx="100" cy="50" rx="30" ry="30" fill="#000"/>
+            <rect id="eyelid-top" x="20" y="0" width="160" height="50" fill="#ff00ff"/>
+            <rect id="eyelid-bottom" x="20" y="50" width="160" height="50" fill="#ff00ff"/>
+        </svg>
+    </div>
+
+    <!-- Hidden narrative source for TTS -->
+    <div id="narrative-audio-source" aria-hidden="true"></div>
+
+    <!-- Cinematic vignette overlay sitting above the canvas but below HUD -->
+    <div id="vignette"></div>
+
+    <!-- Three.js Canvas -->
+    <canvas id="scene-canvas"></canvas>
+
+    <!-- Top UI Bar -->
+    <div id="top-bar">
+        <div id="scene-title-group">
+            <!-- Logo first, then title, matching the screenshot composition -->
+            <img src="/IMG_0439.webp" id="top-chroma-logo" alt="Chroma Awards logo">
+            <div id="scene-title">LOADING...</div>
+        </div>
+        <div id="wtf-ticker">INITIALIZING DREAM STATE...</div>
+        <div id="dream-time">00:00</div>
+    </div>
+
+    <!-- Bottom UI Bar -->
+    <div id="bottom-bar">
+        <div id="stats-panel">
+            <div class="stat-item">
+                <span class="stat-label">HEALTH (HP)</span>
+                <div class="stat-bar-container">
+                    <div class="stat-bar" id="lucidity-bar" style="width: 100%"></div>
+                </div>
+                <span class="stat-value" id="lucidity-value">100%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">STAMINA</span>
+                <div class="stat-bar-container">
+                    <div class="stat-bar" id="coherence-bar" style="width: 100%"></div>
+                </div>
+                <span class="stat-value" id="coherence-value">100%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">WANTED LEVEL</span>
+                <div class="stat-bar-container">
+                    <div class="stat-bar" id="perception-bar" style="width: 0%"></div>
+                </div>
+                <span class="stat-value" id="perception-value">☆☆☆☆☆</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">CASH</span>
+                <div class="stat-bar-container">
+                    <div class="stat-bar" id="chroma-bar" style="width: 0%"></div>
+                </div>
+                <span class="stat-value" id="chroma-value">$0</span>
+            </div>
+        </div>
+        
+        <div id="command-interface">
+            <input type="text" id="command-input" placeholder="TYPE YOUR IMPOSSIBLE ACTION...">
+            <button id="command-submit">MANIFEST</button>
+            <button id="credits-button" title="Credits & Inspiration">◎</button>
+            <button id="journal-button" title="View your journey journal">📓 JOURNAL</button>
+            <!-- MUSIC PLAYER CONTROLS -->
+            <div id="music-controls" aria-label="Music player controls">
+                <button id="music-play-pause" title="Play/Pause music">▶</button>
+                <button id="music-next" title="Skip to next track">⏭</button>
+                <button id="music-vol-down" title="Turn music volume down">➖</button>
+                <button id="music-vol-up" title="Turn music volume up">➕</button>
+                <button id="master-vol-down" title="Master volume down">🔉−</button>
+                <button id="master-vol-up" title="Master volume up">🔊+</button>
+                <span id="master-vol-indicator" aria-label="Master volume level">100%</span>
+                <!-- NEW: TTS toggle button -->
+                <button id="tts-toggle" title="Toggle narration (TTS)">🔊 TTS</button>
+            </div>
+            <!-- NEW: Abstract bars badge anchored to bottom bar -->
+            <img src="/IMG_0438.webp" id="bottom-bars-logo" alt="Abstract bars waveform">
+        </div>
+    </div>
+
+    <!-- Choice Bubbles (dynamically positioned in 3D) -->
+    <div id="choice-bubbles"></div>
+
+    <!-- Reality Flash Effect -->
+    <div id="reality-flash"></div>
+
+    <!-- Lightweight toast for UX feedback -->
+    <div id="toast" aria-live="polite"></div>
+
+    <!-- Global loading overlay for async operations -->
+    <div id="global-loading" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-orb">
+                <div class="loading-ring"></div>
+                <div class="loading-core"></div>
+            </div>
+            <div id="loading-text" class="glitch-text" data-text="MANIFESTING...">MANIFESTING...</div>
+        </div>
+    </div>
+
+    <!-- Credits & Inspiration Modal -->
+    <div id="credits-modal" aria-hidden="true">
+        <div id="credits-backdrop"></div>
+        <div id="credits-content">
+            <button id="credits-close" aria-label="Close credits">×</button>
+            <h2>CREDITS & INSPIRATION</h2>
+            <div id="credits-pages">
+                <!-- Page 1: Main Credits & Competition Narrative -->
+                <div class="credits-page" data-page-index="0">
+                    <section>
+                        <h3>Game Design</h3>
+                        <p>Built on the core ChromaShift design pillars: hyper-surreal dreamscapes, total player agency, consciousness-based gameplay, and non-linear exploration of the Chroma-Dream.</p>
+                    </section>
+                    <section>
+                        <h3>Core Mechanics</h3>
+                        <p>Chroma-Dream state with Lucidity, Reality Coherence, Perception, and Dream Time metrics driving how the world bends and reacts to every impossible action.</p>
+                    </section>
+                    <section>
+                        <h3>Generative Systems</h3>
+                        <p>Dual control system combining curated choice bubbles with a Generative Command Interface, powered by interpretation modules that transform language into surreal scenes.</p>
+                    </section>
+                    <section>
+                        <h3>Aesthetics & Visuals</h3>
+                        <p>High-brightness, hyper-real interiors distorted by dream logic, using a surreal color palette, breathing lighting, and glitchy animation effects to keep reality unstable.</p>
+                    </section>
+                    <section>
+                        <h3>Technical Stack</h3>
+                        <p>Three.js and WebGL for panoramic rendering, custom shaders and post-processing vibes via CSS, and vanilla JavaScript orchestrating narrative, UI, and multimodal timing.</p>
+                    </section>
+                    <section>
+                        <h3>Artistic Influences</h3>
+                        <p>Surrealist art traditions, David Lynch’s dream logic, and Haruki Murakami’s quiet urban strangeness inform the tone, pacing, and sense of uncanny familiarity.</p>
+                    </section>
+                    <section class="credits-final-note">
+                        <p>ChromaShift is not a game in the traditional sense. It is an experience; there is no ending, there is no beginning—there is only the Chroma-Dream.</p>
+                    </section>
+                </div>
+
+                <!-- Page 2: README.md (summary only, full text in README.md) -->
+                <div class="credits-page" data-page-index="1">
+                    <section>
+                        <h3>Documentation Page 1: README.md</h3>
+                        <p>See the in-project <code>README.md</code> for the complete design document.</p>
+                    </section>
+                </div>
+
+                <!-- Page 3: QUICKSTART.md (summary only) -->
+                <div class="credits-page" data-page-index="2">
+                    <section>
+                        <h3>Documentation Page 2: QUICKSTART.md</h3>
+                        <p>See <code>QUICKSTART.md</code> in the project root for the full quick reference guide.</p>
+                    </section>
+                </div>
+
+                <!-- Page 4: PROJECT_SUMMARY.md (summary only) -->
+                <div class="credits-page" data-page-index="3">
+                    <section>
+                        <h3>Documentation Page 3: PROJECT_SUMMARY.md</h3>
+                        <p>See <code>PROJECT_SUMMARY.md</code> for the complete competition summary.</p>
+                    </section>
+                </div>
+            </div>
+            <div id="credits-pagination">
+                <button id="credits-prev">Prev</button>
+                <span id="credits-page-indicator">Page 1 / 4</span>
+                <button id="credits-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Description Modal (opens at the beginning of the game) -->
+    <div id="game-description-modal" aria-hidden="true">
+        <div id="game-description-backdrop"></div>
+        <div id="game-description-content">
+            <button id="game-description-close" aria-label="Close game description">×</button>
+            <h2>What ChromaShift Is &amp; How It Works</h2>
+            <p class="description-note">
+                This description is fully editable. You can tweak it, select it directly, or use the COPY button to grab everything for documentation, pitch decks, or submission forms.
+            </p>
+            <textarea id="game-description-textarea">
+ChromaShift is a hyper-surreal, open-agency dream simulator built as a panoramic choose-your-own-adventure experience. It drops you into a persistent “Chroma-Dream” where the normal rules of reality are replaced by layered dream logic, high-brightness visuals, and symbolic cause-and-effect. Instead of playing a fixed story, you play a consciousness: every action you take bends the world, rewrites the narrative, and shifts the internal state of the dream.
+
+You play as a Chromatist, a lucid dreamer who realizes they are trapped in a composite dream woven out of modern life (living rooms, supermarkets, city streets) and extreme surrealist hallucination (melting floors, impossible architecture, recursive signage). Your only reliable power is language and choice: you decide what to focus on, where to go, and what to attempt, and the dream engine interprets those decisions into new scenes, new stats, and new anomalies.
+
+At a high level, the experience is driven by a compulsory multimodal loop that repeats every time you act:
+
+1. CRT PROLOGUE / TRANSITION (Phase 3)  
+   • A full-screen CRT television overlay appears, showing a glitching RGB logo and a static-heavy “Living Room” portal.  
+   • Text on the CRT presents a prologue or narrative update, often framed as a “20-SECOND PROTOCOL FAILURE” or similar urgency event.  
+   • During this phase, the system uses Text-to-Speech via the browser’s native speechSynthesis API to read ONLY the narrative description. The voice is intentionally left as the default system voice with flattened pitch/rate settings to preserve a robotic, lo-fi aesthetic. No external AI voice services are used.  
+   • While TTS runs, subtle reality flashes and eye-blink effects pulse over the CRT, reinforcing the sense that the player’s consciousness is flickering in and out of stability.  
+   • Background music is handled by a lightweight playlist system that cycles through a curated set of vaporwave/dreamlike tracks and keeps the mood continuous across scenes.
+
+2. PANORAMIC SCENE GENERATION (Phase 4 – Image)  
+   • Each scene is represented as a 360° equirectangular panorama rendered inside a Three.js sphere.  
+   • The engine constructs a detailed imagePrompt from the narrative text and sends it to an image generator (via websim.imageGen). The prompt always enforces:  
+     – equirectangular 360° panoramic  
+     – hyper-realism meets surrealism  
+     – high brightness and contrast  
+     – impossible geometry and strong color accents  
+   • The resulting image is applied as a texture on the inner surface of a sphere around the camera. The user sees the world from the center, looking outward at the dreamscape.  
+   • To preserve performance, textures are cached and disposed properly so the GPU does not get overloaded by repeated scene transitions.
+
+3. NARRATION AND DREAM LOGIC (Phase 4 – Audio)  
+   • The engine generates or receives a structured scene object that ALWAYS matches a strict JSON schema:  
+     – title (SCENE TITLE [LOCATION TYPE])  
+     – narrativeDescription (200–300 words of rich, surreal description)  
+     – ticker (a short “WTF moment” or subconscious whisper)  
+     – lucidity, coherence, perception (numeric stats, 0–100)  
+     – imagePrompt (360° prompt for the panorama)  
+     – choices (exactly four exploration choices)  
+     – prologText (short conflict or urgency text)  
+   • This scene is parsed through a robust safeParseLLMScene helper that tolerates messy AI output (e.g., arrays or extra text) and falls back to a coherent glitch scene if parsing fails.  
+   • The stats are clamped and written into the HUD bars labeled LUCIDITY, REALITY COHERENCE, PERCEPTION, and CHROMA-KEYS COLLECTED. These stats are not just decorative; they reflect how intense, unstable, or perceptually warped the dream has become.  
+   • The ticker text in the top bar summarizes the current anomaly (“Floor liquefaction observed”, “Mascot eyes tracking viewer independently”, etc.), acting as a one-line subconscious whisper.
+
+4. CHOICE & COMMAND INTERACTION (Phase 5 – UX)  
+   • Once the CRT phase ends, the overlay fades and the panoramic scene is fully visible again.  
+   • Four semi-transparent choice bubbles are created. Behind the scenes, the engine generates 3D “anchor” points on the inside of the sphere and projects them into screen space so the bubbles feel attached to contextually relevant parts of the environment.  
+   • You can drag-to-pan the camera horizontally and vertically (with clamped vertical rotation) to look around. On desktop this uses mouse dragging; on touch devices, it uses touch dragging. The camera does NOT passively follow the pointer; it only moves when you drag.  
+   • Clicking one of the four bubbles feeds the choice text back into the generative engine as the player’s MANIFESTATION COMMAND.  
+   • In parallel, you also have a free-form command input at the bottom labeled MANIFEST. Typing anything here and pressing Enter or clicking MANIFEST sends your text into the same generative pipeline. There are no invalid commands—every verb and noun is interpreted through surrealist logic.  
+   • Together, the curated bubbles and the free-form manifest input form a dual control system:  
+     – Structured control (bubbles) for guided, authored moments.  
+     – Generative control (commands) for pure, player-driven exploration.
+
+5. DREAM STATE & PROGRESSION  
+   • dreamState is a persistent object tracking lucidity, reality coherence, perception, chroma-keys, and time in the dream.  
+   • Lucidity represents how aware you are that this is a dream; high lucidity gives more “control” flavor in descriptions, low lucidity makes events feel more overwhelming and automatic.  
+   • Reality coherence measures environmental stability; low coherence creates more extreme distortions, flickers, and impossible architecture.  
+   • Perception indicates your current sensory mode (e.g., DISTORTED, MULTIVERSAL AWARENESS, COSMIC AWARENESS), subtly changing how scenes are described.  
+   • Chroma-keys are symbolic milestones tied to the overarching “Chroma Award” meta-goal. Collecting them is referenced in the narrative and HUD but the game deliberately avoids a conventional “win/lose” state; instead, it hints at an emergent conclusion when enough symbolic integration has occurred.  
+   • Dream Time increments non-linearly in the HUD, reinforcing that time here is more of a suggestion than a rule.
+
+HOW THE SYSTEM IS BUILT TECHNICALLY  
+• Rendering: Three.js with a single inverted sphere geometry, textured by dynamically generated or curated panoramic images.  
+• Controls: Custom drag-to-pan logic with clamped vertical rotation and separate mouse/touch handling, designed for smooth, predictable control.  
+• UI: Pure HTML/CSS overlays (top bar, bottom bar, choice bubbles, CRT overlay, vignette) layered on top of the WebGL canvas.  
+• Audio: A background music playlist managed by a lightweight JS controller, plus narration handled by window.speechSynthesis (no external voices).  
+• Generative Logic: websim.chat.completions is used with a detailed system prompt that encodes the 100+ design rules (visual rules, narrative rules, command rules, meta rules). The engine supplies the current dreamState and the player’s latest MANIFESTATION COMMAND, and expects back a single JSON scene object.  
+• Robustness: All generative JSON is parsed via safeParseLLMScene; if the model returns malformed content, the engine swaps in a glitch scene instead of breaking the experience. Image generation is cached and error-handled, and the UI provides toasts when reality “fails to render” but recovers gracefully.
+
+WHY THE GAME EXISTS  
+ChromaShift is designed as a playground for dream logic and player agency. Instead of forcing you through a fixed storyline, it treats your inputs—both structured choices and free-form commands—as the primary creative force. The goal is not to “win” but to explore: to see what happens when a system takes your impossible ideas seriously and tries to respond with coherent, beautiful wrongness. Every scene is a negotiation between your intent, the current dreamState, and the surreal rules encoded in the engine’s prompts.
+
+In practice, this makes ChromaShift useful as:  
+• An experimental narrative toybox where you can test bizarre ideas and see how the dream interprets them.  
+• A visual mood-board generator that pairs detailed surreal writing with matching panoramic imagery.  
+• A proof-of-concept for hybrid authored/generative experiences that still feel cohesive and intentional.  
+• A sort of interactive design document for surrealism itself—showing how rule-based “wrongness” can stay internally consistent over time.
+
+HOW TO USE THIS DESCRIPTION  
+You can edit everything in this text area to match the current build, a specific competition brief, or your own creative positioning. When you click COPY, the entire contents are written to your clipboard so you can paste them into forms, pitches, or documentation without manually reselecting. Treat this block as the canonical, in-game “meta description” of what ChromaShift is, how it works, and why it exists.
+            </textarea>
+            <div id="game-description-actions">
+                <button id="game-description-copy">COPY DESCRIPTION</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Journal Modal -->
+    <div id="journal-modal" aria-hidden="true">
+        <div id="journal-backdrop"></div>
+        <div id="journal-content">
+            <button id="journal-close" aria-label="Close journal">×</button>
+            <h2>PLAYER JOURNAL</h2>
+            <p class="journal-note">Each page records what you did, what reality showed you, and the panorama that manifested.</p>
+            <div id="journal-entries-container"></div>
+        </div>
+    </div>
+
+    <!-- Hidden background music element: Journey to the interwebs -->
+    <audio id="main-audio" src="/Journey to the interweb.mp3" preload="auto"></audio>
+
+    <!-- NEW: Main game bootstrap -->
+    <script type="module" src="./chromashift-navigator.js"></script>
+</body>
+</html>
+

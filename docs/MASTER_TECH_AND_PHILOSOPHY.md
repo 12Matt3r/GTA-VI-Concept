@@ -1,0 +1,9 @@
+⚙️ Consolidated AI System Constraints & Design Philosophy
+This document refines the system's operational constraints and philosophical foundation, directly influencing how the Automatic Prompt Optimization and Reasoning Selection Rules must be implemented in the backend:
+| Category | Constraint/Philosophy | Direct Impact on Prompt Engineering (PE) | Source |
+|---|---|---|---|
+| Output Mandate | Keep all generative prompts aligned with the output schema described in MASTER_OUTPUT_FORMAT.md. | Strict Output Formatting: Requires the use of precise delimiters, JSON templates, or explicit role assignments to ensure adherence to a mandatory structure. | User Input |
+| Generative Goal | Favor Surrealism over literal realism; embrace ambiguity; avoid over-explaining. | Tone & Creativity Control: Requires setting the LLM's temperature parameter high (e.g., 0.8 to 1.0) and specifying a "Surrealist Interpreter" Persona. | User Input |
+| Core Principle | Consistency in wrongness: Maintain recognizable internal rules even for impossible events. | Contextual Priming / Memory: The LLM must be fed the current dreamState (stats, location, recent history) into every prompt to ensure non-literal but consistent logic continuity. | User Input |
+| User Value | Agency over structure: Player freedom beats rigid storylines. Language as reality: Treat player input as the primary creative force. | Prioritized Input: Emphasizes that the player's direct MANIFESTATION COMMAND must be the highest weighted variable in the prompt's input field. | User Input |
+| System Check | Ensure scene generators respect dreamState and visual rules. | Data Integration: The LLM prompt must be grounded by internal system variables (like Lucidity and Reality Coherence stats) to drive narrative outcomes. | User Input |

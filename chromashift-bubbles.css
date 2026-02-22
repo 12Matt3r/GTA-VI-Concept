@@ -1,0 +1,147 @@
+/* Choice bubbles, reality flash, and toast notifications */
+
+#choice-bubbles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 90;
+    padding-top: 8vh;
+    padding-bottom: 10vh;
+}
+
+.choice-bubble {
+    position: absolute;
+    max-width: 280px;
+    padding: 14px 20px;
+    background: rgba(10, 5, 20, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 4px;
+    border: 1px solid rgba(157, 0, 255, 0.3);
+    border-left: 3px solid var(--consciousness-purple);
+    color: var(--ghost-white);
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    opacity: 0.85;
+    pointer-events: auto;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: bubble-float 6s ease-in-out infinite;
+    /* Create a cool corner clip effect using clip-path could be nice, but simple borders are safer for now. */
+}
+
+/* Dimmed / disabled interaction state for bubbles */
+body.loading .choice-bubble {
+    opacity: 0.4;
+    cursor: wait;
+    filter: grayscale(0.8);
+}
+
+.choice-bubble:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(157, 0, 255, 0.25);
+    background: rgba(20, 10, 30, 0.9);
+    border-color: var(--neon-pink);
+    border-left-color: var(--neon-pink);
+    z-index: 100;
+}
+
+/* Hidden state during TTS / CRT sequence */
+.choice-bubble.choices-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Temporary locked feedback when player acts too early */
+.locked-feedback {
+    animation: locked-jitter 0.4s ease-in-out;
+}
+
+@keyframes bubble-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes locked-jitter {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
+}
+
+/* Reality Flash Effect: cinematic white flash with scanline texture */
+#reality-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+    mix-blend-mode: screen;
+    opacity: 0;
+    z-index: 950;
+}
+
+#reality-flash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.12) 0px,
+        rgba(255, 255, 255, 0.12) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    opacity: 0.6;
+}
+
+#reality-flash.flash {
+    animation: reality-flash-burst 0.16s ease-out;
+}
+
+@keyframes reality-flash-burst {
+    0% {
+        opacity: 0.95;
+        transform: scale(1.02);
+    }
+    60% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+/* Toast for UX feedback */
+#toast {
+    position: fixed;
+    bottom: 160px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    padding: 10px 18px;
+    max-width: 280px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ghost-white);
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    box-shadow:
+        0 0 12px rgba(0, 255, 255, 0.5),
+        0 0 24px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 120;
+    transition:
+        opacity 0.25s ease-out,
+        transform 0.25s ease-out;
+}
+
+#toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}

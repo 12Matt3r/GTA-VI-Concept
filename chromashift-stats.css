@@ -1,0 +1,59 @@
+/* Stats panel and stat bar styling */
+
+#stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 300px;
+    padding-right: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-label {
+    font-family: var(--font-header);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--electric-cyan);
+    min-width: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: right;
+}
+
+.stat-bar-container {
+    flex: 1;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* Skewed look for that Vice City / Cyberpunk UI feel */
+    transform: skewX(-15deg);
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-pink), #ff5e00);
+    transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 0 8px var(--neon-pink);
+}
+
+/* Custom colors for different stats */
+#lucidity-bar { background: linear-gradient(90deg, #ff0055, #ff00cc); box-shadow: 0 0 8px #ff0055; }
+#coherence-bar { background: linear-gradient(90deg, #00ffff, #0088ff); box-shadow: 0 0 8px #00ffff; }
+#perception-bar { background: linear-gradient(90deg, #ffd700, #ffaa00); box-shadow: 0 0 8px #ffd700; }
+#chroma-bar { background: linear-gradient(90deg, #00ff00, #00cc00); box-shadow: 0 0 8px #00ff00; }
+
+.stat-value {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--ghost-white);
+    min-width: 45px;
+    text-align: left;
+    margin-left: 5px;
+}

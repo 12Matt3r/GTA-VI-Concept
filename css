@@ -1,0 +1,14 @@
+// ... existing code ...
+#glitch-effect {
+    position: absolute;
+    width: 45%;
+    max-width: 600px;
+    z-index: 1002;
+    mix-blend-mode: screen;
+    animation: glitch-pulse 0.3s infinite;
+}
+
+@keyframes glitch-pulse {
+    0%, 100% { opacity: 0.8; transform: translate(0, 0); }
+// ... existing code ...
+

@@ -1,0 +1,563 @@
+/* CRT-specific overlay and intro TV styling extracted from chromashift.css */
+
+/* CRT Transition Overlay */
+#crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000; /* make outer area solid so only TV fills view */
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+#crt-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* UPDATED: Make CRT TV fill the entire screen and crop as needed (no background edge) */
+#crt-tv {
+    position: absolute;
+    inset: -10%;
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    z-index: 1003;
+    filter: drop-shadow(0 0 50px var(--neon-pink));
+    transform: none;
+}
+
+/* Black "TV off" cover enlarged to cover the purple edges */
+#crt-screen-off {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1350px;
+    height: 90%;
+    background: #000000;
+    z-index: 1002;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.95);
+}
+
+/* RGB glitch effect centered in the TV screen area */
+#glitch-effect {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 1200px;
+    height: 80%;
+    z-index: 1002;
+    mix-blend-mode: screen;
+    animation: glitch-pulse 0.3s infinite;
+    opacity: 0.09;
+}
+
+/* Blinking loading text in bottom-left of CRT, mimicking an embedded video overlay */
+#crt-loading-text {
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+    z-index: 1003;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    color: var(--electric-cyan);
+    text-shadow:
+        0 0 4px rgba(0, 255, 255, 0.8),
+        0 0 10px rgba(0, 0, 0, 1);
+    opacity: 0.85;
+    animation: crt-loading-blink 1s steps(2, start) infinite;
+    pointer-events: none;
+}
+
+/* Skip Intro button overlayed on the CRT, placed below the main screen area */
+#crt-skip-intro {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    transform: translateX(-50%);
+    z-index: 1003;
+    padding: 6px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--ghost-white);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 0 10px rgba(0, 255, 255, 0.7),
+        0 0 18px rgba(0, 0, 0, 0.95);
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#crt-skip-intro:hover {
+    background: rgba(0, 255, 255, 0.18);
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 14px rgba(0, 255, 255, 0.9),
+        0 0 24px rgba(0, 0, 0, 1);
+}
+
+#crt-skip-intro:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 8px rgba(0, 255, 255, 0.6),
+        0 0 18px rgba(0, 0, 0, 0.9);
+}
+
+#crt-skip-intro:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* NEW: Save Game button positioned just under the power button */
+#save-game-button {
+    position: absolute;
+    right: 6%;
+    top: 37%;
+    z-index: 1004;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--dream-gold);
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--dream-gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 0 10px rgba(255, 215, 0, 0.7),
+        0 0 18px rgba(0, 0, 0, 0.95);
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#save-game-button:hover {
+    background: rgba(255, 215, 0, 0.14);
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 14px rgba(255, 215, 0, 0.9),
+        0 0 24px rgba(0, 0, 0, 1);
+}
+
+#save-game-button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 8px rgba(255, 215, 0, 0.6),
+        0 0 18px rgba(0, 0, 0, 0.9);
+}
+
+#save-game-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* NEW: Load Game button stacked under Save Game */
+#load-game-button {
+    position: absolute;
+    right: 6%;
+    top: 44%;
+    z-index: 1004;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--electric-cyan);
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--electric-cyan);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 0 10px rgba(0, 255, 255, 0.7),
+        0 0 18px rgba(0, 0, 0, 0.95);
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#load-game-button:hover {
+    background: rgba(0, 255, 255, 0.14);
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 14px rgba(0, 255, 255, 0.9),
+        0 0 24px rgba(0, 0, 0, 1);
+}
+
+#load-game-button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 8px rgba(0, 255, 255, 0.6),
+        0 0 18px rgba(0, 0, 0, 0.9);
+}
+
+#load-game-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* NEW: New Game button below Load Game */
+#new-game-button {
+    position: absolute;
+    right: 6%;
+    top: 51%;
+    z-index: 1004;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--reality-red);
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--reality-red);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 0 10px rgba(255, 0, 85, 0.7),
+        0 0 18px rgba(0, 0, 0, 0.95);
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#new-game-button:hover {
+    background: rgba(255, 0, 85, 0.16);
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 14px rgba(255, 0, 85, 0.9),
+        0 0 24px rgba(0, 0, 0, 1);
+}
+
+#new-game-button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 8px rgba(255, 0, 85, 0.6),
+        0 0 18px rgba(0, 0, 0, 0.9);
+}
+
+#new-game-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* Slightly smaller on mobile but keep the same placement feel */
+@media (max-width: 600px) {
+    #crt-skip-intro {
+        font-size: 10px;
+        bottom: 10%;
+        padding: 4px 12px;
+    }
+
+    #save-game-button {
+        right: 4%;
+        top: 40%;
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+
+    #load-game-button {
+        right: 4%;
+        top: 47%;
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+
+    #new-game-button {
+        right: 4%;
+        top: 54%;
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+}
+
+/* Slightly smaller on mobile but keep the same placement feel */
+@media (max-width: 600px) {
+    #crt-loading-text {
+        font-size: 12px;
+        bottom: 12%;
+        left: 8%;
+    }
+}
+
+@keyframes crt-loading-blink {
+    0%, 45% { opacity: 0.85; }
+    50%, 100% { opacity: 0.1; }
+}
+
+/* Intro WebM video sits in the same TV screen region as the glitch effect */
+#crt-intro-video {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 1200px;
+    height: 80%;
+    z-index: 1002;
+    object-fit: cover;
+    background: #000;
+}
+
+/* Power button (Chromashift.gif) on TV side panel */
+#crt-power-button {
+    position: absolute;
+    z-index: 1004;
+    right: 6%;
+    top: 15%;
+    width: 10%;
+    max-width: 130px;
+    transform: translateY(0);
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow:
+        0 0 20px rgba(255, 0, 255, 0.9),
+        0 0 32px rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--dream-gold);
+}
+
+#crt-power-button:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 0 26px rgba(255, 0, 255, 1),
+        0 0 40px rgba(0, 0, 0, 1);
+}
+
+/* NEW: Badges for uploaded images inside CRT overlay */
+.crt-badge {
+    position: absolute;
+    z-index: 1005;
+    max-width: 16%;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.9));
+}
+
+#crt-chroma-logo {
+    /* Move to far top-left over the TV image */
+    top: 4%;
+    left: 4%;
+}
+
+#crt-bars-logo {
+    /* Move to far bottom-right over the TV image */
+    bottom: 4%;
+    right: 4%;
+}
+
+/* Narrative box inside CRT overlay */
+#prolog-text {
+    position: absolute;
+    top: 20%;
+    left: 43%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 1000px;
+    height: 60%;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 3px solid var(--reality-red);
+    color: var(--dream-gold);
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: center;
+    z-index: 1001;
+    animation: text-glitch 0.5s infinite;
+    box-shadow: 0 0 30px var(--reality-red);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Structured text styles inside CRT overlay */
+#prolog-text .crt-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    text-shadow: 0 0 10px var(--dream-gold);
+}
+
+#prolog-text .crt-prolog {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: var(--electric-cyan);
+}
+
+#prolog-text .crt-narrative {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ghost-white);
+    flex-grow: 1;
+    /* Make the narrative area itself scrollable so longer text can be read */
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 6px;
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+}
+
+/* "WAKE UP" button inside the CRT overlay for the initial menu */
+#wake-up-button {
+    margin-top: 18px;
+    padding: 10px 26px;
+    background: linear-gradient(135deg, var(--reality-red), var(--neon-pink));
+    border: none;
+    color: var(--ghost-white);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow:
+        0 0 14px rgba(255, 0, 85, 0.9),
+        0 0 24px rgba(0, 0, 0, 0.9);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+}
+
+#wake-up-button:hover {
+    transform: translateY(-1px) scale(1.03);
+    box-shadow:
+        0 0 18px rgba(255, 0, 255, 0.9),
+        0 0 30px rgba(0, 0, 0, 1);
+}
+
+#wake-up-button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 10px rgba(255, 0, 85, 0.7),
+        0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+#wake-up-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+}
+
+@keyframes text-glitch {
+    0%, 90%, 100% { transform: translateX(-50%) skew(0deg); }
+    92% { transform: translateX(-50%) skew(-2deg); }
+    94% { transform: translateX(-50%) skew(2deg); }
+    96% { transform: translateX(-50%) skew(-1deg); }
+}
+
+/* Eye blink overlay */
+#eye-blink {
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1004;
+    opacity: 0;
+}
+
+#eye-blink.blink {
+    animation: eye-blink-anim 0.6s ease-in-out;
+}
+
+@keyframes eye-blink-anim {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    15% { opacity: 1; }
+    20% { opacity: 1; }
+    30% { opacity: 1; }
+    40% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+#eyelid-top, #eyelid-bottom {
+    transition: transform 0.15s ease-in-out;
+}
+
+#eye-blink.blink #eyelid-top {
+    animation: eyelid-top-anim 0.6s ease-in-out;
+}
+
+#eye-blink.blink #eyelid-bottom {
+    animation: eyelid-bottom-anim 0.6s ease-in-out;
+}
+
+@keyframes eyelid-top-anim {
+    0%, 100% { transform: translateY(0); }
+    15%, 30% { transform: translateY(50px); }
+}
+
+@keyframes eyelid-bottom-anim {
+    0%, 100% { transform: translateY(0); }
+    15%, 30% { transform: translateY(-50px); }
+}
+
+/* Mobile adjustments for CRT layout */
+@media (max-width: 600px) {
+    #crt-power-button {
+        right: 4%;
+        top: 18%;
+        width: 16%;
+    }
+
+    #prolog-text {
+        width: 90%;
+        max-width: none;
+        padding: 20px;
+        font-size: 14px;
+        top: 10%;
+        height: 75%;
+    }
+
+    #crt-screen-off,
+    #glitch-effect {
+        width: 90%;
+        max-width: none;
+        height: 90%;
+    }
+
+    #glitch-effect {
+        left: 45%;
+    }
+
+    /* NEW: Slightly smaller CRT badges on mobile, pinned near corners */
+    .crt-badge {
+        max-width: 24%;
+    }
+
+    /* Keep mobile positions consistent with new desktop layout */
+    #crt-chroma-logo {
+        top: 4%;
+        left: 4%;
+    }
+
+    #crt-bars-logo {
+        bottom: 4%;
+        right: 4%;
+    }
+}

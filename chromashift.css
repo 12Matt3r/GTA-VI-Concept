@@ -1,0 +1,16 @@
+/* AGENT-STYLED: This file was refactored into modular CSS chunks for maintainability. */
+/* removed inline style rules; moved into:
+   - chromashift-variables.css
+   - chromashift-layout.css
+   - chromashift-stats.css
+   - chromashift-command.css
+   - chromashift-bubbles.css
+   - chromashift-responsive.css
+*/
+
+@import url('./chromashift-variables.css');
+@import url('./chromashift-layout.css');
+@import url('./chromashift-stats.css');
+@import url('./chromashift-command.css');
+@import url('./chromashift-bubbles.css');
+@import url('./chromashift-responsive.css');

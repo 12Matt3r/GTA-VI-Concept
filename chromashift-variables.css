@@ -1,0 +1,247 @@
+/* Core variables, base resets, body background, and global loading/vignette styles */
+
+
+:root {
+    /* -- SURREALIST COLOR PALETTE -- */
+    --dream-gold: #FFD700;
+    --neon-pink: #FF00FF;
+    --consciousness-purple: #2a004d; /* Updated to actual purple for UI depth */
+    --electric-cyan: #00FFFF;
+    --reality-red: #FF0055;
+    --void-black: #050505;
+    --ghost-white: rgba(240, 248, 255, 0.95);
+    
+    /* UI GLASS EFFECT */
+    --glass-bg: rgba(10, 10, 15, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(12px);
+    
+    /* FONTS */
+    --font-header: 'Orbitron', sans-serif;
+    --font-body: 'Space Mono', monospace;
+}
+
+
+/* NEW: Intro click gate overlay using Chromashift.gif */
+/* Hidden / deprecated: power interaction now lives on the CRT TV itself */
+#intro-click-gate {
+    display: none;
+}
+
+#intro-click-gate img {
+    max-width: 80%;
+    max-height: 80%;
+    box-shadow:
+        0 0 30px rgba(255, 0, 255, 0.8),
+        0 0 60px rgba(0, 0, 0, 0.95);
+    border-radius: 8px;
+}
+
+/* Hidden state after first click */
+#intro-click-gate.hidden {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* NEW: ensure the document is locked to viewport height */
+html {
+    height: 100%;
+}
+
+/* NEW: Slight global scanline overlay for subtle CRT texture */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: soft-light;
+}
+
+/* Ensure primary UI and scene sit above scanline overlay */
+#scene-canvas,
+#vignette,
+#top-bar,
+#bottom-bar,
+#choice-bubbles,
+#reality-flash,
+#credits-modal {
+    position: fixed;
+    z-index: 5;
+}
+
+/* NEW: Subtle animated background to give the dream a slow breathing motion */
+body {
+    font-family: var(--font-body);
+    /* OVERFLOW HIDDEN: Prevents scrolling caused by UI elements */
+    overflow: hidden;
+    height: 100dvh;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(255, 0, 128, 0.15), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(0, 255, 255, 0.12), transparent 55%),
+        #000000;
+    color: var(--ghost-white);
+    animation: body-breathe 14s ease-in-out infinite alternate;
+}
+
+@keyframes body-breathe {
+    0% {
+        background-position: 0% 0%, 100% 100%;
+        filter: brightness(1);
+    }
+    100% {
+        background-position: 5% -3%, 95% 103%;
+        filter: brightness(1.05);
+    }
+}
+
+/* Subtle global loading feedback */
+body.loading {
+    cursor: progress;
+}
+
+body.loading * {
+    transition: filter 0.25s ease;
+    filter: saturate(0.7) brightness(0.9);
+}
+
+/* Global loading overlay centered on screen */
+#global-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+}
+
+#global-loading.visible {
+    opacity: 1;
+    pointer-events: auto; /* Block interaction while loading */
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#loading-text {
+    font-family: var(--font-header);
+    color: var(--electric-cyan);
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--electric-cyan);
+    animation: pulse-text 1.5s infinite alternate;
+}
+
+@keyframes pulse-text {
+    from { opacity: 0.7; }
+    to { opacity: 1; text-shadow: 0 0 20px var(--electric-cyan), 0 0 10px var(--neon-pink); }
+}
+
+.loading-orb {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.loading-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 255, 255, 0.25);
+    border-top-color: var(--neon-pink);
+    border-right-color: var(--dream-gold);
+    animation: loading-spin 0.9s linear infinite;
+    box-shadow:
+        0 0 18px rgba(255, 0, 255, 0.6),
+        0 0 26px rgba(0, 255, 255, 0.4);
+}
+
+.loading-core {
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 0, 255, 0.9), rgba(0, 0, 0, 0.95));
+    box-shadow: 0 0 14px rgba(255, 0, 255, 0.8);
+}
+
+@keyframes loading-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Cinematic vignette over the 3D scene */
+#vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 6;
+    background:
+        radial-gradient(circle at center, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, 0.6) 100%);
+    mix-blend-mode: multiply;
+    opacity: 0.9;
+    animation: vignette-breathe 12s ease-in-out infinite;
+}
+
+@keyframes vignette-breathe {
+    0% {
+        opacity: 0.82;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.95;
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 0.82;
+        transform: scale(1);
+    }
+}
+
+/* Slightly lift vignette brightness on mobile to keep clarity */
+@media (max-width: 600px) {
+    #vignette {
+        opacity: 0.75;
+    }
+}
+
+/* SCENE CANVAS - Corrected to fit between the 8vh top bar and 10vh bottom bar */
+#scene-canvas {
+    position: fixed;
+    top: 8vh;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 8vh - 10vh);
+    filter: brightness(1.4) contrast(1.2);
+}
+
+/* Hidden narrative source for TTS */
+#narrative-audio-source {
+    display: none;
+}
+
+/* CRT overlay, screen-off, glitch, power button, prolog text, and eye-blink styles
+   are defined in chromashift-crt.css */
+

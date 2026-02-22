@@ -1,0 +1,141 @@
+/* Top and bottom bars, scene title/ticker, and general layout */
+
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8vh;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(20,0,40,0.85) 100%);
+    backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1050;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Decorative glowing line under top bar */
+#top-bar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-pink), var(--electric-cyan), var(--neon-pink), transparent);
+    opacity: 0.8;
+}
+
+/* NEW: group scene title and logo to mirror screenshot composition */
+#scene-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-start;
+    flex: 1;
+}
+
+#scene-title {
+    font-family: var(--font-header);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--dream-gold);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    text-transform: uppercase;
+}
+
+@keyframes title-glitch {
+    0%, 96%, 100% { opacity: 1; }
+    97% { opacity: 0.8; transform: translateX(-2px); }
+    98% { opacity: 0.9; transform: translateX(2px); }
+    99% { opacity: 1; transform: translateX(0); }
+}
+
+#wtf-ticker {
+    flex: 2;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--electric-cyan);
+    letter-spacing: 0.5px;
+    padding: 6px 20px;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    margin: 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#dream-time {
+    font-family: var(--font-header);
+    font-size: 18px;
+    color: var(--ghost-white);
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--neon-pink);
+    min-width: 80px;
+    text-align: right;
+}
+
+/* NEW: Top-bar Chroma Awards logo (tucked beside title on the left) */
+#top-chroma-logo {
+    height: 70%;
+    max-height: 42px;
+    object-fit: contain;
+    margin-right: 6px;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
+}
+
+/* Bottom Bar - Fixed height 10vh to prevent scrolling */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    min-height: 80px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.98) 0%, rgba(10,5,20,0.9) 100%);
+    backdrop-filter: var(--glass-blur);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    z-index: 1050;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.6);
+    /* Allow horizontal scrolling if absolute emergency on tiny screens */
+    overflow-x: auto; 
+    overflow-y: hidden;
+    /* Hide scrollbar */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+#bottom-bar::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* Decorative glowing line over bottom bar */
+#bottom-bar::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--electric-cyan), var(--neon-pink), var(--electric-cyan), transparent);
+    opacity: 0.8;
+}
+
+/* NEW: Bottom-bar abstract bars logo */
+#bottom-bars-logo {
+    height: 60%;
+    max-height: 36px;
+    margin-left: 6px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
+}

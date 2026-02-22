@@ -1,0 +1,160 @@
+/* Responsive layout tuning for top/bottom bars, stats, command interface, bubbles, and CRT tweaks */
+
+/* Tablet / Laptop screens (Expanded breakpoint to catch iPad Landscape) */
+@media (max-width: 1100px) {
+    #top-bar {
+        height: 8vh;
+        padding: 0 16px;
+    }
+
+    #scene-title {
+        font-size: 16px;
+    }
+
+    #scene-title-group {
+        gap: 6px;
+    }
+
+    #wtf-ticker {
+        display: none;
+    }
+
+    #dream-time {
+        font-size: 16px;
+    }
+
+    #bottom-bar {
+        height: 10vh;
+        padding: 10px 16px;
+    }
+
+    #stats-panel {
+        min-width: 0;
+        max-width: 45%;
+    }
+
+    .stat-label {
+        min-width: 110px;
+        font-size: 10px;
+    }
+
+    .stat-bar-container {
+        height: 14px;
+    }
+
+    .stat-value {
+        font-size: 12px;
+    }
+
+    #command-interface {
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    #command-input {
+        width: 100%;
+        max-width: 180px;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    #command-submit {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+
+    /* Hide Master Volume controls on tablet to save space for TTS */
+    #master-vol-down,
+    #master-vol-up,
+    #master-vol-indicator {
+        display: none !important;
+    }
+
+    /* Shrink Journal button text on tablet */
+    #journal-button {
+        font-size: 0; /* Hide text */
+        padding: 10px;
+    }
+    #journal-button::before {
+        content: '📓'; /* Keep icon */
+        font-size: 14px;
+    }
+
+    #music-controls button {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+        padding: 0 4px;
+    }
+
+    .choice-bubble {
+        font-size: 12px;
+        padding: 10px 16px;
+        max-width: 220px;
+    }
+
+    /* NEW: slightly shrink HUD logos on medium screens */
+    #top-chroma-logo,
+    #bottom-bars-logo {
+        max-height: 26px;
+    }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 600px) {
+    #top-bar {
+        padding: 0 10px;
+        height: 8vh;
+    }
+
+    #scene-title {
+        font-size: 14px;
+    }
+
+    #bottom-bar {
+        height: 10vh;
+        padding: 8px 10px;
+        gap: 6px;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+    }
+
+    #stats-panel {
+        gap: 6px;
+    }
+
+    .stat-item {
+        gap: 8px;
+    }
+
+    #command-interface {
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #command-input {
+        max-width: 100%;
+    }
+
+    #command-submit {
+        width: 100%;
+        text-align: center;
+    }
+
+    #music-controls {
+        justify-content: flex-end;
+    }
+
+    #choice-bubbles {
+        padding-top: 8vh;
+        padding-bottom: 10vh;
+    }
+
+    /* NEW: further shrink HUD logos on small screens */
+    #top-chroma-logo,
+    #bottom-bars-logo {
+        max-height: 20px;
+    }
+}

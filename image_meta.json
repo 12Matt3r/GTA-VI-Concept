@@ -1,0 +1,62 @@
+[
+  {
+    "query": "A hyper-realistic supermarket aisle with surreal elements: melting products, liquid floor, distorted perspective, dream-like atmosphere, high brightness, 8K quality",
+    "image_info": {
+      "url": "https://i.etsystatic.com/54427661/r/il/ca0026/6370784707/il_fullxfull.6370784707_b6lq.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 516812,
+      "width": 3000,
+      "height": 3000,
+      "total_pixels": 9000000,
+      "basic_score": 0.42837522906806075,
+      "file_name": "supermarket_surreal_1.jpg"
+    },
+    "llm_score": null
+  },
+  {
+    "query": "Bright, hyper-realistic grocery store interior with surrealist distortions, melting objects, impossible geometry, dreamscape quality",
+    "image_info": {
+      "url": "https://offloadmedia.feverup.com/secretlasvegas.co/wp-content/uploads/2021/06/15104029/omega-mart-LV.png",
+      "img_format": "PNG",
+      "mode": "P",
+      "file_size": 588826,
+      "width": 1200,
+      "height": 772,
+      "total_pixels": 926400,
+      "basic_score": 0.954877870542497,
+      "file_name": "supermarket_dreamscape_7.png"
+    },
+    "llm_score": null
+  },
+  {
+    "query": "Bright, hyper-realistic grocery store interior with surrealist distortions, melting objects, impossible geometry, dreamscape quality",
+    "image_info": {
+      "url": "https://thumbs.dreamstime.com/z/futuristic-grocery-store-vibrant-neon-lighting-sleek-displays-surreal-features-brightly-lit-shelves-filled-colorful-377117361.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 251032,
+      "width": 1600,
+      "height": 1156,
+      "total_pixels": 1849600,
+      "basic_score": 0.7940566436771459,
+      "file_name": "supermarket_dreamscape_5.jpg"
+    },
+    "llm_score": null
+  },
+  {
+    "query": "Bright, hyper-realistic grocery store interior with surrealist distortions, melting objects, impossible geometry, dreamscape quality",
+    "image_info": {
+      "url": "https://img.freepik.com/premium-photo/hyper-realistic-grocery-store-with-neon-light_976492-128927.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 113261,
+      "width": 626,
+      "height": 373,
+      "total_pixels": 233498,
+      "basic_score": 0.7703089038953502,
+      "file_name": "supermarket_dreamscape_1.jpg"
+    },
+    "llm_score": null
+  }
+]
