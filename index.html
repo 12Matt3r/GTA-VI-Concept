@@ -58,6 +58,9 @@
         </svg>
     </div>
 
+    <!-- Weather Overlay -->
+    <div id="weather-overlay"></div>
+
     <!-- Hidden narrative source for TTS -->
     <div id="narrative-audio-source" aria-hidden="true"></div>
 
@@ -112,8 +115,17 @@
         </div>
         
         <div id="command-interface">
+            <button id="phone-button" title="Open Phone / Inventory">📱</button>
+            <button id="gps-button" title="Open GPS Map">🗺️</button>
+
             <input type="text" id="command-input" placeholder="TYPE YOUR IMPOSSIBLE ACTION...">
             <button id="command-submit">MANIFEST</button>
+
+            <!-- TTS Selector -->
+            <select id="tts-voice-select" title="Select Narrator Voice" style="margin-left: 10px; max-width: 100px;">
+                <option value="">Voice</option>
+            </select>
+
             <button id="credits-button" title="Credits & Inspiration">◎</button>
             <button id="journal-button" title="View your journey journal">📓 JOURNAL</button>
             <!-- MUSIC PLAYER CONTROLS -->
@@ -150,6 +162,29 @@
                 <div class="loading-core"></div>
             </div>
             <div id="loading-text" class="glitch-text" data-text="MANIFESTING...">MANIFESTING...</div>
+        </div>
+    </div>
+
+    <!-- Phone / Inventory Modal -->
+    <div id="phone-modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button id="phone-close" class="modal-close">×</button>
+            <h2>INVENTORY & STATS</h2>
+            <ul id="inventory-list" class="inventory-grid">
+                <!-- Items populated by JS -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- GPS Map Modal -->
+    <div id="gps-modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button id="gps-close" class="modal-close">×</button>
+            <h2>VICE CITY GPS</h2>
+            <div id="gps-map-container" style="width: 100%; height: 300px; background: #000; display: flex; align-items: center; justify-content: center; border: 1px solid var(--neon-blue);">
+                <p style="color: var(--neon-blue);">[SATELLITE LINK OFFLINE]</p>
+                <!-- In a real implementation, this would show a generated map image -->
+            </div>
         </div>
     </div>
 
@@ -328,7 +363,6 @@ You can edit everything in this text area to match the current build, a specific
     <audio id="main-audio" src="/Journey to the interweb.mp3" preload="auto"></audio>
 
     <!-- NEW: Main game bootstrap -->
-    <script type="module" src="./chromashift-navigator.js"></script>
+    <script type="module" src="./chromashift-engine.js"></script>
 </body>
 </html>
-
